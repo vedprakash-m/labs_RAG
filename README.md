@@ -236,19 +236,32 @@ After completing this lab, you'll be able to:
 ## Project Structure
 
 ```
-├── healthcare_rag_env/        # Virtual environment
-├── docs/                      # Documentation
-├── src/healthcare_rag/        # Main source code
-│   ├── data/                  # Data processing modules
-│   ├── models/                # Model definitions
-│   ├── utils/                 # Utility functions
-│   └── main.py                # Application entry point
-├── tests/                     # Test files
-├── config/                    # Configuration files
-├── notebooks/                 # Jupyter notebooks
-├── .env                       # Environment variables
-├── requirements.txt           # Python dependencies
-└── .gitignore                # Git ignore rules
+├── 📚 Lab_instructions/         # Complete lab guide and tutorial
+│   ├── Labs_RAG.md             # Main lab instructions 
+│   ├── Labs_RAG.html           # HTML version
+│   └── Labs_RAG.pdf            # PDF version
+├── 📜 scripts/                 # All executable scripts
+│   ├── setup_healthcare_rag.py # Python environment setup
+│   ├── setup_azure_rag.ps1    # Azure infrastructure setup
+│   ├── generate_healthcare_pdfs.py # Sample document generator
+│   ├── upload.py               # Document upload utility
+│   ├── index.py                # RAG indexing pipeline
+│   ├── search_test.py          # Search functionality demo
+│   └── query.py                # Complete RAG query interface
+├── 📖 docs/                    # Documentation and sample data
+│   ├── *.pdf                   # Sample healthcare documents
+│   ├── AZURE_SETUP_README.md   # Azure setup guide
+│   ├── README_COMPLETE.md      # Detailed project summary
+│   └── *.md                    # Additional documentation
+├── 🏗️ src/healthcare_rag/      # Source code structure
+│   ├── data/                   # Data processing modules
+│   ├── models/                 # Model definitions
+│   ├── utils/                  # Utility functions
+│   └── main.py                 # Application entry point
+├── ⚙️ config/                  # Configuration files
+├── 📋 requirements.txt         # Python dependencies
+├── 🔧 .env.example             # Environment template
+└── healthcare_rag_env/         # Virtual environment
 ```
 
 ## Installed Packages
