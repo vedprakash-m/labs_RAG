@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Labs_RAG.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="%F0%9F%A7%AA-lab-building-a-healthcare-rag-pipeline-using-vibe-coding">🧪 Lab: Building a Healthcare RAG Pipeline using Vibe Coding</h1>
+<p><em>Author: Ved Mishra - 9/22/2025 | Optimized for Learning &amp; Discovery</em></p>
+<h2 id="%F0%9F%8E%AF-what-youll-build">🎯 What You'll Build</h2>
+<p>By the end of this lab, you'll have a <strong>working healthcare knowledge system</strong> that can answer medical questions like:</p>
+<ul>
+<li><em>&quot;What are normal blood pressure ranges?&quot;</em></li>
+<li><em>&quot;What blood sugar levels indicate diabetes?&quot;</em></li>
+<li><em>&quot;What lifestyle changes prevent heart disease?&quot;</em></li>
+</ul>
+<p><strong>Your Achievement</strong>: A complete RAG (Retrieval-Augmented Generation) system built entirely through <strong>vibe coding</strong> - where you describe what you want and AI builds it for you.</p>
+<hr>
+<h2 id="%F0%9F%A4%94-what-is-vibe-coding">🤔 What is Vibe Coding?</h2>
+<p><strong>Traditional Coding:</strong></p>
+<pre class="hljs"><code><div><span class="hljs-comment"># 50+ lines of manual Azure connection code</span>
+<span class="hljs-keyword">from</span> azure.storage.blob <span class="hljs-keyword">import</span> BlobServiceClient
+<span class="hljs-keyword">from</span> azure.core.credentials <span class="hljs-keyword">import</span> AzureKeyCredential
+<span class="hljs-comment"># ... complex manual setup ...</span>
+</div></code></pre>
+<p><strong>Vibe Coding:</strong></p>
+<pre class="hljs"><code><div>Create a script that connects to Azure and uploads healthcare PDFs with progress tracking and error handling.
+</div></code></pre>
+<p>→ <em>AI generates the complete working code!</em></p>
+<p><strong>Key Insight</strong>: You become an <strong>AI conductor</strong> - orchestrating systems through conversation rather than writing every line of code. Your workflow changes from writing every line to a powerful new loop: <strong>prompt → generate → review → refine → debug</strong>.</p>
+<p><strong>The Reality</strong>: Vibe coding isn't magic - it's an iterative conversation where you:</p>
+<ol>
+<li><strong>Prompt</strong>: Describe what you want clearly and specifically</li>
+<li><strong>Generate</strong>: AI creates a strong first draft</li>
+<li><strong>Review</strong>: You examine the code and identify gaps or issues</li>
+<li><strong>Refine</strong>: Guide the AI to improve specific aspects</li>
+<li><strong>Debug</strong>: Test and iterate until it works perfectly</li>
+</ol>
+<p>This approach lets you focus on <strong>system design</strong> and <strong>problem-solving</strong> instead of syntax and boilerplate. <strong>The more specific your prompt, the better the AI's first draft will be.</strong></p>
+<hr>
+<h2 id="%F0%9F%8F%97%EF%B8%8F-what-youre-building-architecture-overview">🏗️ What You're Building (Architecture Overview)</h2>
+<p>Here's the simple system you'll create:</p>
+<pre><code class="language-mermaid"><div class="mermaid">flowchart TD
+    A[📄 Healthcare PDFs] --> B[☁️ Azure Blob Storage]
+    B --> C[🔍 Azure AI Search]
+    D[❓ Your Question] --> E[🤖 RAG App]
+    C --> E
+    E --> F[💬 Answer from GPT-4o-mini]
+    
+    style A fill:#e1f5fe
+    style C fill:#f3e5f5
+    style F fill:#e8f5e8
+</div></code></pre>
+<p><strong>The Flow:</strong></p>
+<ol>
+<li><strong>Upload</strong>: Store your healthcare documents in Azure Blob Storage</li>
+<li><strong>Index</strong>: Convert documents into searchable AI embeddings in Azure AI Search</li>
+<li><strong>Query</strong>: Your question finds relevant chunks, GPT generates an answer</li>
+</ol>
+<hr>
+<h2 id="%F0%9F%93%8B-before-you-start">📋 Before You Start</h2>
+<h3 id="%E2%9C%85-quick-setup-checklist">✅ Quick Setup Checklist</h3>
+<ul>
+<li><strong>VS Code</strong>: <a href="https://code.visualstudio.com/">Download</a></li>
+<li><strong>GitHub Copilot</strong>: <a href="https://aka.ms/github/copilot">Internal Resource</a>, <a href="https://docs.github.com/en/copilot/getting-started-with-github-copilot">Setup Guide</a></li>
+<li><strong>Python 3.11+</strong>: <a href="https://www.python.org/downloads/">Download</a></li>
+<li><strong>Azure Account</strong>: <a href="https://my.visualstudio.com/">Get Free Monthly Credits</a> or <a href="https://azure.microsoft.com/free/">Public Free Trial</a></li>
+<li><strong>Azure CLI</strong>: <a href="https://learn.microsoft.com/cli/azure/install-azure-cli">Install Guide</a></li>
+</ul>
+<h3 id="%F0%9F%94%91-azure-subscription-options">🔑 Azure Subscription Options</h3>
+<p><strong>Recommended</strong>: Use your own free trial subscription or with monthly Azure credits for the full learning experience of resource management and cost awareness.</p>
+<p><strong>Backup Option</strong>: If you need a shared subscription, you can use:</p>
+<ul>
+<li><strong>XStore AI Subscription</strong>: <code>6cbd0699-eae8-4633-8054-691a6b726d90</code></li>
+<li>⚠️ <strong>Important</strong>: Still use your alias in resource names for easy identification and cleanup</li>
+</ul>
+<h3 id="%F0%9F%94%90-security-note-for-microsoft-engineers">🔐 Security Note for Microsoft Engineers</h3>
+<p>For this lab, we'll use <code>.env</code> files for simplicity. In production Microsoft systems, always use <strong>Azure Key Vault</strong> for secrets management and follow our enterprise security guidelines.</p>
+<h3 id="%F0%9F%92%A1-what-each-tool-does">💡 What Each Tool Does</h3>
+<ul>
+<li><strong>Azure Blob Storage</strong> = Cloud file cabinet for your healthcare documents</li>
+<li><strong>Azure AI Search</strong> = Smart database that finds similar content using AI</li>
+<li><strong>Azure OpenAI</strong> = AI that creates embeddings and generates answers</li>
+<li><strong>LangChain</strong> = Helper that splits documents into manageable chunks</li>
+</ul>
+<h3 id="%E2%8F%B1%EF%B8%8F-time--cost">⏱️ Time &amp; Cost</h3>
+<ul>
+<li><strong>Beginner Track</strong>: 30 minutes | <strong>$3-5 Azure costs</strong></li>
+<li><strong>Intermediate Track</strong>: 60 minutes | <strong>$5-10 Azure costs</strong></li>
+<li><strong>Advanced Track</strong>: 90 minutes | <strong>$10-15 Azure costs</strong></li>
+</ul>
+<hr>
+<h2 id="%F0%9F%9A%80-track-a-%22hello-rag%22-perfect-for-beginners">🚀 Track A: &quot;Hello RAG!&quot; (Perfect for Beginners)</h2>
+<p><em>Get your first RAG system working in 30 minutes with early wins and simple prompts</em></p>
+<h3 id="%F0%9F%93%8D-progress-tracker">📍 Progress Tracker</h3>
+<pre class="hljs"><code><div>[🎯] Step 1: Setup &amp; First Success
+[ ] Step 2: Create Simple Documents  
+[ ] Step 3: Build Basic RAG
+[ ] Step 4: Test Your System
+[ ] 🎉 Celebrate: You built RAG with AI!
+</div></code></pre>
+<h3 id="step-1-quick-environment-setup-5-minutes">Step 1: Quick Environment Setup (5 minutes)</h3>
+<p>💡 <strong>What We're Doing</strong>: Setting up your workspace and getting Azure ready</p>
+<p><strong>Create Your Workspace:</strong></p>
+<ol>
+<li>Create folder: <code>C:\dev\my-first-rag</code></li>
+<li>Open in VS Code: <code>File → Open Folder</code></li>
+<li>Open terminal: `Ctrl + ``</li>
+</ol>
+<p><strong>Simple Copilot Prompt:</strong></p>
+<pre class="hljs"><code><div>Create a basic Python setup script for a healthcare RAG project that:
+1. Creates a virtual environment
+2. Installs essential packages: azure-storage-blob, azure-search-documents, openai, langchain, python-dotenv
+3. Creates a simple project structure: docs/, src/, .env
+4. Shows success messages for each step
+
+Make it beginner-friendly with clear progress indicators.
+</div></code></pre>
+<p><strong>Execute &amp; Verify:</strong></p>
+<ul>
+<li>Run the generated script</li>
+<li><strong>✅ Early Win</strong>: You should see success messages and folders created</li>
+</ul>
+<h3 id="step-2-simple-azure-setup-8-minutes">Step 2: Simple Azure Setup (8 minutes)</h3>
+<p>💡 <strong>What We're Doing</strong>: Creating your cloud services with one prompt</p>
+<p><strong>Copilot Prompt:</strong>
+<em>Note: Replace <code>&lt;your-alias&gt;</code> with your Microsoft alias to avoid naming conflicts</em></p>
+<pre class="hljs"><code><div>Create a PowerShell script that sets up basic Azure resources for RAG:
+1. Login to Azure and list subscriptions
+2. Create resource group &quot;rg-&lt;your-alias&gt;-rag&quot; in eastus2 (replace &lt;your-alias&gt; with your actual Microsoft alias)
+3. Create storage account with name &quot;st&lt;youralias&gt;rag&quot; + random suffix and &quot;health-docs&quot; container
+4. Create Azure AI Search service with name &quot;srch-&lt;your-alias&gt;-rag&quot; + random suffix (use free tier)
+5. Create Azure OpenAI with name &quot;aoai-&lt;your-alias&gt;-rag&quot; and deploy text-embedding-3-small and gpt-4o-mini models
+6. Generate .env file with all keys and endpoints
+7. Print a success summary with resource names and estimated monthly costs
+
+Include helpful error messages and verification steps.
+If resources already exist with these names, append a timestamp or random number.
+</div></code></pre>
+<p><strong>🔧 Quick Test:</strong></p>
+<ul>
+<li>Run the script</li>
+<li><strong>✅ Early Win</strong>: Check Azure portal - you should see your new resources!</li>
+</ul>
+<h3 id="step-3-generate-healthcare-documents-5-minutes">Step 3: Generate Healthcare Documents (5 minutes)</h3>
+<p>💡 <strong>What We're Doing</strong>: Creating realistic medical content for our system</p>
+<p><strong>Copilot Prompt:</strong></p>
+<pre class="hljs"><code><div>Create a simple Python script that generates 2 realistic healthcare PDFs:
+
+Document 1 - Blood Pressure Guide (500 words):
+- Normal: &lt;120/80 mmHg
+- Elevated: 120-129/&lt;80 mmHg  
+- Stage 1: 130-139/80-89 mmHg
+- Stage 2: ≥140/90 mmHg
+- Include lifestyle recommendations
+
+Document 2 - Diabetes Basics (500 words):
+- Normal blood sugar: &lt;100 mg/dL fasting
+- Prediabetes: 100-125 mg/dL fasting
+- Diabetes: ≥126 mg/dL fasting
+- Include management tips
+
+Use reportlab to create actual PDFs in docs/ folder.
+Include progress messages and file verification.
+</div></code></pre>
+<p><strong>✅ Quick Verification:</strong></p>
+<ul>
+<li>Check <code>docs/</code> folder for 2 PDF files</li>
+<li>Open one PDF to verify content looks medical and realistic</li>
+</ul>
+<h3 id="step-4-build-your-rag-system-15-minutes">Step 4: Build Your RAG System (15 minutes)</h3>
+<p>💡 <strong>What We're Doing</strong>: Creating your RAG pipeline step-by-step so you understand each component</p>
+<h4 id="step-4a-create-the-upload-script-5-minutes">Step 4a: Create the Upload Script (5 minutes)</h4>
+<p><strong>💡 Why This First</strong>: Before we can search documents, we need to get them into Azure Blob Storage. This is the <strong>data ingestion</strong> part of our pipeline.</p>
+<p><strong>Copilot Prompt:</strong></p>
+<pre class="hljs"><code><div>Create a Python script named upload.py that:
+1. Connects to Azure Blob Storage using credentials from .env file
+2. Uploads all PDFs from the local 'docs/' folder to the container
+3. Shows a progress message for each file uploaded
+4. Confirms successful uploads with file names and sizes
+5. Handles errors gracefully with helpful messages
+
+Make it simple and well-commented for learning purposes.
+</div></code></pre>
+<p><strong>🔧 Quick Test</strong>: Run <code>python upload.py</code> - you should see your PDFs being uploaded to Azure.</p>
+<h4 id="step-4b-create-the-indexing-script-5-minutes">Step 4b: Create the Indexing Script (5 minutes)</h4>
+<p><strong>💡 Why This Second</strong>: Now that files are in the cloud, we need to make them <strong>searchable</strong>. This script converts documents into AI-friendly &quot;chunks&quot; and &quot;embeddings&quot; (vectors that represent meaning).</p>
+<p><strong>Key Concepts</strong>:</p>
+<ul>
+<li><strong>Chunking</strong>: Breaking a long document into searchable paragraphs (~300 characters each)</li>
+<li><strong>Embeddings</strong>: Converting text into numbers so AI can find similar concepts, not just keywords</li>
+<li><strong>Vector Search</strong>: Finding chunks that are conceptually similar to your question</li>
+</ul>
+<p><strong>Copilot Prompt:</strong></p>
+<pre class="hljs"><code><div>Create an index.py script that:
+1. Downloads PDFs from our Azure blob container
+2. Uses LangChain's PyPDFLoader to extract text from PDFs
+3. Splits text into 300-character chunks with 50-character overlap (preserves context)
+4. Uses Azure OpenAI embedding model to create vector representations
+5. Stores chunks and their vectors in Azure AI Search index
+6. Shows progress: &quot;Processing doc 1/2&quot;, &quot;Created 15 chunks&quot;, &quot;Uploaded to search index&quot;
+7. Displays final summary: total chunks indexed
+
+Include clear error handling and explanatory comments.
+</div></code></pre>
+<p><strong>🔧 Quick Test</strong>: Run <code>python index.py</code> - you should see chunks being created and uploaded to your search index.</p>
+<h4 id="step-4c-create-the-query-script-5-minutes">Step 4c: Create the Query Script (5 minutes)</h4>
+<p><strong>💡 Why This Last</strong>: This is where the magic happens! This script performs <strong>Retrieval-Augmented Generation</strong> - it finds relevant chunks and uses them to generate accurate answers.</p>
+<p><strong>The RAG Process</strong>:</p>
+<ol>
+<li>Convert your question into an embedding (same format as document chunks)</li>
+<li>Find the most similar chunks using vector search</li>
+<li>Feed those chunks + your question to GPT-4o-mini</li>
+<li>Generate an answer based on your specific documents</li>
+</ol>
+<p><strong>Copilot Prompt:</strong></p>
+<pre class="hljs"><code><div>Create a query.py script that:
+1. Takes a user question from command line input
+2. Creates an embedding for the question using Azure OpenAI
+3. Searches Azure AI Search to find top 3 most relevant document chunks
+4. Creates a prompt combining the user question with retrieved chunks
+5. Sends this enhanced prompt to GPT-4o-mini for answer generation
+6. Displays the answer with source attribution (which documents were used)
+7. Includes medical disclaimer: &quot;This is for educational purposes only&quot;
+
+Show the relevance scores and chunk sources for transparency.
+</div></code></pre>
+<p><strong>🔧 Quick Test</strong>: Run <code>python query.py</code> and ask &quot;What are normal blood pressure ranges?&quot;</p>
+<h3 id="step-5-test-your-complete-rag-system-2-minutes">Step 5: Test Your Complete RAG System (2 minutes)</h3>
+<p><strong>Run Your Pipeline:</strong></p>
+<pre class="hljs"><code><div>python upload.py    <span class="hljs-comment"># Step 1: Upload documents to cloud</span>
+python index.py     <span class="hljs-comment"># Step 2: Create searchable AI index  </span>
+python query.py     <span class="hljs-comment"># Step 3: Start asking questions!</span>
+</div></code></pre>
+<p><strong>Test Questions:</strong></p>
+<ul>
+<li>&quot;What are normal blood pressure ranges?&quot;</li>
+<li>&quot;What blood sugar levels indicate diabetes?&quot;</li>
+<li>&quot;What lifestyle changes prevent heart disease?&quot;</li>
+</ul>
+<p><strong>✅ Success Criteria:</strong></p>
+<ul>
+<li>You get answers with source references</li>
+<li>Response time under 10 seconds</li>
+<li>Medical disclaimer included</li>
+<li>Relevance scores visible</li>
+</ul>
+<h3 id="%F0%9F%8E%89-congratulations">🎉 Congratulations!</h3>
+<p>You just built a complete RAG system using vibe coding! Your system can now:</p>
+<ul>
+<li>✅ Store healthcare documents in the cloud</li>
+<li>✅ Understand and search medical content</li>
+<li>✅ Answer questions with proper sources</li>
+<li>✅ Handle errors gracefully</li>
+</ul>
+<h3 id="%F0%9F%94%84-level-up-refactoring-for-readability-optional---5-minutes">🔄 Level Up: Refactoring for Readability (Optional - 5 minutes)</h3>
+<p>💡 <strong>What We're Doing</strong>: Our three scripts work great, but for real projects, we'd organize them better. Let's use AI to refactor our code into a cleaner structure - this shows how vibe coding helps with code improvement, not just initial creation.</p>
+<p><strong>The Transformation:</strong></p>
+<pre><code class="language-mermaid"><div class="mermaid">graph TD
+    subgraph "Before: Separate Scripts"
+        A[upload.py]
+        B[index.py] 
+        C[query.py]
+    end
+    subgraph "After: Organized Class"
+        D[pipeline.py<br/>HealthcareRAGPipeline Class]
+    end
+    A --> D
+    B --> D
+    C --> D
+    
+    style A fill:#ffebee
+    style B fill:#ffebee
+    style C fill:#ffebee
+    style D fill:#e8f5e8
+</div></code></pre>
+<p><strong>Copilot Prompt:</strong></p>
+<pre class="hljs"><code><div>Take the logic from my upload.py, index.py, and query.py files and refactor them into a single Python class called HealthcareRAGPipeline in a new file pipeline.py. 
+
+The class should have these methods:
+- __init__(self) - loads configuration from .env
+- upload_documents(self) - uploads PDFs to blob storage  
+- create_index(self) - processes documents and creates search index
+- ask_question(self, question) - performs RAG query and returns answer
+
+Include proper error handling, logging, and docstrings. Make it professional and maintainable.
+</div></code></pre>
+<p><strong>💡 Why This Matters</strong>: This demonstrates a key vibe coding skill - using AI not just for initial development, but for <strong>code quality improvement</strong>. In real projects, you'll constantly refactor and enhance your AI-generated code.</p>
+<p><strong>🤔 Reflection Questions:</strong></p>
+<ul>
+<li>What did the AI understand from your prompts?</li>
+<li>How is this different from manual coding?</li>
+<li>What would you ask for next?</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%8F%97%EF%B8%8F-track-b-production-ready-rag-for-intermediate-learners">🏗️ Track B: Production-Ready RAG (For Intermediate Learners)</h2>
+<p><em>Build an enterprise-grade system with monitoring, testing, and advanced features</em></p>
+<h3 id="prerequisites">Prerequisites</h3>
+<ul>
+<li>✅ Completed Track A or familiar with basic RAG concepts</li>
+<li>✅ Comfortable with VS Code and terminal operations</li>
+</ul>
+<h3 id="enhanced-architecture">Enhanced Architecture</h3>
+<pre><code class="language-mermaid"><div class="mermaid">flowchart TD
+    A[Healthcare PDFs] --> B[Azure Blob Storage]
+    B --> C[Document Processor]
+    C --> D[Text Chunks]
+    D --> E[Azure OpenAI Embeddings]
+    E --> F[Azure AI Search]
+    
+    G[User Query] --> H[Query Processor]
+    H --> I[Vector Search]
+    F --> I
+    I --> J[GPT Response Generator]
+    J --> K[Formatted Answer]
+    
+    L[Monitoring] --> M[Performance Metrics]
+    N[Testing Suite] --> O[Quality Validation]
+    
+    style A fill:#e1f5fe
+    style F fill:#f3e5f5
+    style K fill:#e8f5e8
+    style M fill:#fff3e0
+</div></code></pre>
+<h3 id="step-1-enhanced-project-structure-5-minutes">Step 1: Enhanced Project Structure (5 minutes)</h3>
+<p><strong>Copilot Prompt:</strong></p>
+<pre class="hljs"><code><div>Create a professional RAG project structure with:
+
+src/
+├── config/
+│   ├── settings.py (environment management)
+│   └── azure_config.py (service configurations)
+├── services/
+│   ├── document_service.py (PDF processing)
+│   ├── embedding_service.py (vector operations) 
+│   ├── search_service.py (Azure AI Search)
+│   └── rag_service.py (query orchestration)
+├── utils/
+│   ├── logging_utils.py (structured logging)
+│   └── error_handling.py (custom exceptions)
+└── main.py (CLI interface)
+
+tests/
+├── unit/ (component tests)
+├── integration/ (end-to-end tests)
+└── data/ (test fixtures)
+
+Include __init__.py files, comprehensive .gitignore, and README.md.
+Add type hints and docstrings throughout.
+</div></code></pre>
+<h3 id="step-2-enhanced-document-processing-10-minutes">Step 2: Enhanced Document Processing (10 minutes)</h3>
+<p><strong>Copilot Prompt:</strong></p>
+<pre class="hljs"><code><div>Create an advanced document processing system in src/services/document_service.py:
+
+Features:
+1. Generate 4 comprehensive healthcare documents (1000+ words each):
+   - Diabetes Management Guidelines
+   - Hypertension Treatment Protocols  
+   - Heart Disease Prevention
+   - Cardiovascular Risk Assessment
+
+2. Advanced PDF processing:
+   - Metadata extraction (title, author, creation date)
+   - Smart chunking (preserve paragraphs, respect medical terminology)
+   - Chunk overlapping with context preservation
+   - Quality validation (minimum content length, medical terminology check)
+
+3. Error handling and logging:
+   - Detailed progress tracking
+   - Retry logic for transient failures
+   - Comprehensive error messages
+   - Performance metrics collection
+
+Include async/await for better performance.
+</div></code></pre>
+<h3 id="step-3-advanced-rag-pipeline-15-minutes">Step 3: Advanced RAG Pipeline (15 minutes)</h3>
+<p><strong>Copilot Prompt:</strong></p>
+<pre class="hljs"><code><div>Create a production-ready RAG pipeline with these advanced features:
+
+1. Smart Query Processing:
+   - Query preprocessing (medical terminology normalization)
+   - Multi-vector search strategies
+   - Result ranking and relevance scoring
+   - Query expansion for better matches
+
+2. Response Generation:
+   - Context-aware prompting
+   - Source attribution with confidence scores
+   - Medical safety guardrails
+   - Response quality validation
+
+3. Performance Features:
+   - Connection pooling for Azure services
+   - Caching for frequent queries
+   - Batch processing for efficiency
+   - Rate limiting and throttling
+
+4. Monitoring Integration:
+   - Response time tracking
+   - Cost monitoring
+   - Error rate measurement
+   - Usage analytics
+
+Include comprehensive error handling and detailed logging.
+</div></code></pre>
+<h3 id="step-4-testing--validation-10-minutes">Step 4: Testing &amp; Validation (10 minutes)</h3>
+<p><strong>Copilot Prompt:</strong></p>
+<pre class="hljs"><code><div>Create a comprehensive testing suite:
+
+1. Unit Tests (tests/unit/):
+   - Document processing accuracy
+   - Embedding generation validation  
+   - Search functionality testing
+   - Response quality checks
+
+2. Integration Tests (tests/integration/):
+   - End-to-end pipeline testing
+   - Azure service connectivity
+   - Performance benchmarking
+   - Error scenario handling
+
+3. Healthcare-Specific Tests:
+   - Medical accuracy validation
+   - Source attribution verification
+   - Safety disclaimer presence
+   - Response appropriateness
+
+Test Data:
+- 20 healthcare questions covering different medical domains
+- Expected answer patterns
+- Performance benchmarks (response time &lt;5 seconds)
+- Quality metrics (relevance scores &gt;0.7)
+
+Include automated test reporting and pass/fail criteria.
+</div></code></pre>
+<h3 id="step-5-monitoring--analytics-10-minutes">Step 5: Monitoring &amp; Analytics (10 minutes)</h3>
+<p><strong>Copilot Prompt:</strong></p>
+<pre class="hljs"><code><div>Create a monitoring dashboard system:
+
+1. Real-time Metrics:
+   - Query response times
+   - Embedding generation speed
+   - Search relevance scores
+   - Error rates and types
+
+2. Cost Tracking:
+   - Azure OpenAI token usage
+   - Storage costs
+   - Search service utilization
+   - Daily/monthly cost projections
+
+3. Usage Analytics:
+   - Popular queries and patterns
+   - Document access frequency
+   - User satisfaction metrics
+   - System health indicators
+
+4. Alerting System:
+   - Performance degradation alerts
+   - Error threshold notifications
+   - Cost overrun warnings
+   - Service availability monitoring
+
+Include visual dashboards with charts and real-time updates.
+</div></code></pre>
+<h3 id="step-6-deployment--production-10-minutes">Step 6: Deployment &amp; Production (10 minutes)</h3>
+<p><strong>Copilot Prompt:</strong></p>
+<pre class="hljs"><code><div>Create production deployment tools:
+
+1. Environment Management:
+   - Development, staging, production configs
+   - Secure credential management
+   - Environment-specific settings
+   - Configuration validation
+
+2. Deployment Scripts:
+   - Automated Azure resource provisioning
+   - Application deployment pipeline
+   - Database migration scripts
+   - Health check verification
+
+3. Operational Tools:
+   - Log aggregation and analysis
+   - Performance profiling
+   - Backup and recovery procedures
+   - Scaling recommendations
+
+4. Documentation:
+   - API documentation
+   - Operational runbooks
+   - Troubleshooting guides
+   - Architecture decision records
+
+Include Docker containerization and CI/CD pipeline templates.
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%94%AC-track-c-advanced-enterprise-rag-for-advanced-users">🔬 Track C: Advanced Enterprise RAG (For Advanced Users)</h2>
+<p><em>Add security, compliance, MLOps, and enterprise integration features</em></p>
+<h3 id="prerequisites">Prerequisites</h3>
+<ul>
+<li>✅ Completed Track B</li>
+<li>✅ Understanding of enterprise security concepts</li>
+<li>✅ Familiarity with MLOps practices</li>
+</ul>
+<h3 id="enterprise-features">Enterprise Features</h3>
+<h4 id="security--compliance">Security &amp; Compliance</h4>
+<p><strong>Copilot Prompt:</strong></p>
+<pre class="hljs"><code><div>Implement enterprise security features:
+
+1. Authentication &amp; Authorization:
+   - Azure AD integration
+   - Role-based access control (RBAC)
+   - API key rotation automation
+   - Multi-factor authentication support
+
+2. Data Protection:
+   - Encryption at rest and in transit
+   - PII detection and redaction
+   - Data loss prevention (DLP)
+   - Audit logging for compliance
+
+3. Security Scanning:
+   - Vulnerability assessment
+   - Dependency scanning
+   - Code security analysis
+   - Infrastructure security validation
+
+4. Compliance Features:
+   - HIPAA compliance controls
+   - SOC 2 audit trails
+   - Data retention policies
+   - Privacy impact assessments
+
+Include security testing and penetration testing recommendations.
+</div></code></pre>
+<h4 id="mlops-integration">MLOps Integration</h4>
+<p><strong>Copilot Prompt:</strong></p>
+<pre class="hljs"><code><div>Add MLOps capabilities for production AI systems:
+
+1. Model Management:
+   - Model versioning and lifecycle
+   - A/B testing for prompt variations
+   - Performance monitoring and drift detection
+   - Automated model retraining triggers
+
+2. Data Pipeline Management:
+   - Data validation and quality checks
+   - Feature store integration
+   - Data lineage tracking
+   - Schema evolution management
+
+3. Experiment Tracking:
+   - MLflow integration
+   - Experiment comparison and analysis
+   - Hyperparameter optimization
+   - Model performance benchmarking
+
+4. Production Monitoring:
+   - Model performance degradation alerts
+   - Data drift detection
+   - Concept drift monitoring
+   - Feedback loop integration
+
+Include integration with Azure Machine Learning and MLflow.
+</div></code></pre>
+<h4 id="enterprise-integration">Enterprise Integration</h4>
+<p><strong>Copilot Prompt:</strong></p>
+<pre class="hljs"><code><div>Create enterprise integration capabilities:
+
+1. API Gateway:
+   - RESTful API with OpenAPI documentation
+   - Rate limiting and throttling
+   - API versioning and backward compatibility
+   - Request/response transformation
+
+2. Event-Driven Architecture:
+   - Azure Service Bus integration
+   - Event sourcing patterns
+   - Saga pattern for distributed transactions
+   - Dead letter queue handling
+
+3. Data Connectors:
+   - SharePoint integration
+   - SQL Server connectivity
+   - Active Directory synchronization
+   - Legacy system adapters
+
+4. Scalability Features:
+   - Auto-scaling based on demand
+   - Load balancing strategies
+   - Circuit breaker patterns
+   - Graceful degradation
+
+Include microservices architecture and container orchestration.
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%94%8D-common-issues--solutions">🔍 Common Issues &amp; Solutions</h2>
+<h3 id="when-your-code-has-import-errors">When Your Code Has Import Errors</h3>
+<p><strong>Ask Copilot:</strong></p>
+<pre class="hljs"><code><div>Fix the import statements in this code and ensure all required packages are in requirements.txt with correct versions.
+</div></code></pre>
+<h3 id="when-azure-authentication-fails">When Azure Authentication Fails</h3>
+<p><strong>Ask Copilot:</strong></p>
+<pre class="hljs"><code><div>Debug Azure authentication issues in this code. Add proper error handling and detailed logging for troubleshooting.
+</div></code></pre>
+<h3 id="when-search-results-are-poor">When Search Results Are Poor</h3>
+<p><strong>Ask Copilot:</strong></p>
+<pre class="hljs"><code><div>Optimize the vector search configuration and chunking strategy. Improve relevance scoring and add query preprocessing.
+</div></code></pre>
+<h3 id="when-performance-is-slow">When Performance Is Slow</h3>
+<p><strong>Ask Copilot:</strong></p>
+<pre class="hljs"><code><div>Profile performance bottlenecks in this RAG system. Add caching, connection pooling, and async processing.
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%8E%AF-validation-checklist">🎯 Validation Checklist</h2>
+<h3 id="track-a-beginner">Track A (Beginner)</h3>
+<ul>
+<li><input type="checkbox" id="checkbox0"><label for="checkbox0">Azure resources created successfully (visible in Azure Portal)</label></li>
+<li><input type="checkbox" id="checkbox1"><label for="checkbox1">Healthcare documents generated and stored (2 PDFs in docs/ folder)</label></li>
+<li><input type="checkbox" id="checkbox2"><label for="checkbox2">Basic RAG pipeline answers medical questions accurately</label></li>
+<li><input type="checkbox" id="checkbox3"><label for="checkbox3">System responds in under 10 seconds per query</label></li>
+<li><input type="checkbox" id="checkbox4"><label for="checkbox4">Sources are properly attributed (e.g., &quot;Answer based on: Blood Pressure Guide.pdf&quot;)</label></li>
+<li><input type="checkbox" id="checkbox5"><label for="checkbox5">Relevance scores visible (e.g., &quot;Retrieved chunk with score: 0.85&quot;)</label></li>
+<li><input type="checkbox" id="checkbox6"><label for="checkbox6">Medical disclaimer appears with each answer</label></li>
+</ul>
+<h3 id="track-b-intermediate">Track B (Intermediate)</h3>
+<ul>
+<li><input type="checkbox" id="checkbox7"><label for="checkbox7">Professional project structure implemented (src/ folders created)</label></li>
+<li><input type="checkbox" id="checkbox8"><label for="checkbox8">Advanced document processing working (4 comprehensive medical documents)</label></li>
+<li><input type="checkbox" id="checkbox9"><label for="checkbox9">Production-ready RAG pipeline deployed (class-based architecture)</label></li>
+<li><input type="checkbox" id="checkbox10"><label for="checkbox10">Comprehensive testing suite passing (all unit and integration tests green)</label></li>
+<li><input type="checkbox" id="checkbox11"><label for="checkbox11">Monitoring and analytics functional (performance metrics displayed)</label></li>
+<li><input type="checkbox" id="checkbox12"><label for="checkbox12">Error handling graceful (helpful messages, not crashes)</label></li>
+</ul>
+<h3 id="track-c-advanced">Track C (Advanced)</h3>
+<ul>
+<li><input type="checkbox" id="checkbox13"><label for="checkbox13">Security and compliance features implemented (RBAC, encryption working)</label></li>
+<li><input type="checkbox" id="checkbox14"><label for="checkbox14">MLOps pipeline operational (model versioning, drift detection active)</label></li>
+<li><input type="checkbox" id="checkbox15"><label for="checkbox15">Enterprise integration capabilities deployed (API endpoints responding)</label></li>
+<li><input type="checkbox" id="checkbox16"><label for="checkbox16">Performance meets production requirements (&lt; 3 second response times)</label></li>
+<li><input type="checkbox" id="checkbox17"><label for="checkbox17">Documentation complete and accurate (API docs, runbooks created)</label></li>
+</ul>
+<hr>
+<h2 id="%F0%9F%A7%B9-resource-cleanup-important">🧹 Resource Cleanup (Important!)</h2>
+<p>💡 <strong>Why We Do This</strong>: To avoid unnecessary Azure costs, it's a Microsoft best practice to delete all resources when finished with a project. This is especially important for engineers working with company Azure subscriptions.</p>
+<h3 id="%E2%9A%A0%EF%B8%8F-safe-manual-cleanup-recommended">⚠️ Safe Manual Cleanup (Recommended)</h3>
+<p><strong>Step 1: Verify Your Resources</strong></p>
+<pre class="hljs"><code><div><span class="hljs-comment"># List YOUR specific resource group (replace &lt;your-alias&gt; with your actual alias)</span>
+az group show -<span class="hljs-literal">-name</span> <span class="hljs-string">"rg-&lt;your-alias&gt;-rag"</span> -<span class="hljs-literal">-output</span> table
+
+<span class="hljs-comment"># List all resources in YOUR resource group to confirm they're yours</span>
+az resource list -<span class="hljs-literal">-resource</span><span class="hljs-literal">-group</span> <span class="hljs-string">"rg-&lt;your-alias&gt;-rag"</span> -<span class="hljs-literal">-output</span> table
+</div></code></pre>
+<p><strong>Step 2: Check Costs Before Deletion</strong></p>
+<ul>
+<li>Go to <a href="https://portal.azure.com">Azure Portal</a> → Cost Management</li>
+<li>Filter by your resource group to see actual costs</li>
+<li>Screenshot for your records if needed</li>
+</ul>
+<p><strong>Step 3: Safe Deletion</strong></p>
+<pre class="hljs"><code><div><span class="hljs-comment"># Only delete YOUR resource group (double-check the name!)</span>
+az group delete -<span class="hljs-literal">-name</span> <span class="hljs-string">"rg-&lt;your-alias&gt;-rag"</span> -<span class="hljs-literal">-yes</span>
+</div></code></pre>
+<h3 id="%F0%9F%A4%96-alternative-ai-generated-cleanup-script">🤖 Alternative: AI-Generated Cleanup Script</h3>
+<p><strong>Only if you prefer automation - Copilot Prompt:</strong></p>
+<pre class="hljs"><code><div>Create a PowerShell cleanup script that:
+1. Prompts user to enter their Microsoft alias
+2. Lists resources in &quot;rg-{alias}-rag&quot; resource group specifically  
+3. Shows estimated costs for these resources
+4. Requires user to type &quot;DELETE rg-{alias}-rag&quot; exactly to confirm
+5. Validates the resource group name contains their alias
+6. Deletes only that specific resource group
+7. Confirms successful deletion
+
+Include multiple safety checks to prevent accidental deletion of wrong resources.
+Add warnings if no resources found or if trying to delete non-matching names.
+</div></code></pre>
+<p><strong>✅ Cleanup Verification:</strong></p>
+<ul>
+<li>Check Azure Portal - your specific resource group should be gone</li>
+<li>No ongoing charges for deleted resources</li>
+<li>Keep .env file if you want to recreate resources later</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%8E%93-what-youve-learned">🎓 What You've Learned</h2>
+<h3 id="vibe-coding-skills">Vibe Coding Skills</h3>
+<ul>
+<li>✅ How to describe complex systems in natural language</li>
+<li>✅ Progressive prompt engineering techniques</li>
+<li>✅ AI-assisted debugging and optimization</li>
+<li>✅ Iterative development with AI feedback</li>
+</ul>
+<h3 id="technical-skills">Technical Skills</h3>
+<ul>
+<li>✅ RAG architecture and implementation</li>
+<li>✅ Vector databases and similarity search</li>
+<li>✅ Azure AI services integration</li>
+<li>✅ Production system design patterns</li>
+</ul>
+<h3 id="healthcare-domain-knowledge">Healthcare Domain Knowledge</h3>
+<ul>
+<li>✅ Medical information processing</li>
+<li>✅ Healthcare compliance considerations</li>
+<li>✅ Clinical decision support systems</li>
+<li>✅ Medical data security and privacy</li>
+</ul>
+<hr>
+<h2 id="%F0%9F%9A%80-next-steps">🚀 Next Steps</h2>
+<h3 id="customize-for-your-domain">Customize for Your Domain</h3>
+<pre class="hljs"><code><div>Adapt this RAG system for [your specific domain]:
+1. Replace healthcare documents with [domain-specific content]
+2. Modify query patterns for [domain terminology]
+3. Add domain-specific safety considerations
+4. Update evaluation criteria for [domain requirements]
+
+Maintain the same architecture but optimize for [your use case].
+</div></code></pre>
+<h3 id="scale-to-production">Scale to Production</h3>
+<pre class="hljs"><code><div>Prepare this system for production deployment:
+1. Add comprehensive monitoring and alerting
+2. Implement proper backup and disaster recovery
+3. Set up CI/CD pipelines for continuous deployment
+4. Add performance testing and load balancing
+5. Implement proper security and compliance controls
+</div></code></pre>
+<h3 id="integrate-with-existing-systems">Integrate with Existing Systems</h3>
+<pre class="hljs"><code><div>Connect this RAG system to your existing infrastructure:
+1. Add API endpoints for external system integration
+2. Implement SSO with your identity provider
+3. Create data connectors for your existing data sources
+4. Add webhook support for real-time updates
+5. Implement event-driven architecture patterns
+</div></code></pre>
+<hr>
+<h2 id="%F0%9F%93%9A-additional-resources">📚 Additional Resources</h2>
+<h3 id="learning-materials">Learning Materials</h3>
+<ul>
+<li><a href="https://learn.microsoft.com/azure/ai-services/openai/">Azure OpenAI Documentation</a></li>
+<li><a href="https://python.langchain.com/">LangChain Documentation</a></li>
+<li><a href="https://learn.microsoft.com/azure/search/vector-search-overview">Vector Database Concepts</a></li>
+</ul>
+<h3 id="best-practices-guides">Best Practices Guides</h3>
+<ul>
+<li><a href="https://learn.microsoft.com/azure/architecture/example-scenario/ai/rag-pattern">RAG System Design Patterns</a></li>
+<li><a href="https://learn.microsoft.com/compliance/regulatory/offering-hipaa-hitech">Healthcare AI Compliance</a></li>
+<li><a href="https://learn.microsoft.com/azure/architecture/reference-architectures/ai/mlops-python">Production AI Systems</a></li>
+</ul>
+<h3 id="community--support">Community &amp; Support</h3>
+<ul>
+<li><a href="https://techcommunity.microsoft.com/t5/ai-and-machine-learning-blog/bg-p/MachineLearningBlog">Microsoft AI Community</a></li>
+<li><a href="https://github.com/Azure-Samples/azure-search-openai-demo">Azure AI Samples</a></li>
+<li><a href="https://docs.github.com/copilot/using-github-copilot/best-practices-for-using-github-copilot">GitHub Copilot Best Practices</a></li>
+</ul>
+<hr>
+<p><em>🎉 Congratulations on completing your vibe coding journey! You've learned to build complex AI systems through conversation and specification rather than manual implementation. This is the future of software development.</em></p>
+
+</body>
+</html>
