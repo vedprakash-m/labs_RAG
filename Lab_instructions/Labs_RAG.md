@@ -71,17 +71,13 @@ flowchart TD
 - **VS Code**: [Download](https://code.visualstudio.com/)
 - **GitHub Copilot**: [Internal Resource](https://aka.ms/github/copilot), [Setup Guide](https://docs.github.com/en/copilot/getting-started-with-github-copilot)
 - **Python 3.11+**: [Download](https://www.python.org/downloads/)
-- **Azure Account**: [Get Free Monthly Credits](https://my.visualstudio.com/) or [Public Free Trial](https://azure.microsoft.com/free/)
+- **Azure Account**: [Get Free Monthly Credits (for Microsoft Employees)](https://my.visualstudio.com/) or [Public Free Trial](https://azure.microsoft.com/free/)
 - **Azure CLI**: [Install Guide](https://learn.microsoft.com/cli/azure/install-azure-cli)
 
 ### 🔑 Azure Subscription Options
 **Recommended**: Use your own free trial subscription or with monthly Azure credits for the full learning experience of resource management and cost awareness.
 
-**Backup Option**: If you need a shared subscription, you can use:
-- **XStore AI Subscription**: `6cbd0699-eae8-4633-8054-691a6b726d90`
-- ⚠️ **Important**: Still use your alias in resource names for easy identification and cleanup
-
-### 🔐 Security Note for Microsoft Engineers
+### 🔐 Security Note
 For this lab, we'll use `.env` files for simplicity. In production Microsoft systems, always use **Azure Key Vault** for secrets management and follow our enterprise security guidelines.
 
 ### 💡 What Each Tool Does
@@ -139,14 +135,13 @@ Make it beginner-friendly with clear progress indicators.
 💡 **What We're Doing**: Creating your cloud services with one prompt
 
 **Copilot Prompt:** 
-*Note: Replace `<your-alias>` with your Microsoft alias to avoid naming conflicts*
 ```
 Create a PowerShell script that sets up basic Azure resources for RAG:
 1. Login to Azure and list subscriptions
-2. Create resource group "rg-<your-alias>-rag" in eastus2 (replace <your-alias> with your actual Microsoft alias)
-3. Create storage account with name "st<youralias>rag" + random suffix and "health-docs" container
-4. Create Azure AI Search service with name "srch-<your-alias>-rag" + random suffix (use free tier)
-5. Create Azure OpenAI with name "aoai-<your-alias>-rag" and deploy text-embedding-3-small and gpt-4o-mini models
+2. Create resource group "rg-labs-rag" in eastus2
+3. Create storage account with name "stlabsrag" + random suffix and "health-docs" container
+4. Create Azure AI Search service with name "srch-labs-rag" + random suffix (use free tier)
+5. Create Azure OpenAI with name "aoai-labs-rag" and deploy text-embedding-3-small and gpt-4o-mini models
 6. Generate .env file with all keys and endpoints
 7. Print a success summary with resource names and estimated monthly costs
 

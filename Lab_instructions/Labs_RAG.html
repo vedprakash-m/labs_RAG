@@ -424,17 +424,12 @@ code {
 <li><strong>VS Code</strong>: <a href="https://code.visualstudio.com/">Download</a></li>
 <li><strong>GitHub Copilot</strong>: <a href="https://aka.ms/github/copilot">Internal Resource</a>, <a href="https://docs.github.com/en/copilot/getting-started-with-github-copilot">Setup Guide</a></li>
 <li><strong>Python 3.11+</strong>: <a href="https://www.python.org/downloads/">Download</a></li>
-<li><strong>Azure Account</strong>: <a href="https://my.visualstudio.com/">Get Free Monthly Credits</a> or <a href="https://azure.microsoft.com/free/">Public Free Trial</a></li>
+<li><strong>Azure Account</strong>: <a href="https://my.visualstudio.com/">Get Free Monthly Credits (for Microsoft Employees)</a> or <a href="https://azure.microsoft.com/free/">Public Free Trial</a></li>
 <li><strong>Azure CLI</strong>: <a href="https://learn.microsoft.com/cli/azure/install-azure-cli">Install Guide</a></li>
 </ul>
 <h3 id="%F0%9F%94%91-azure-subscription-options">🔑 Azure Subscription Options</h3>
 <p><strong>Recommended</strong>: Use your own free trial subscription or with monthly Azure credits for the full learning experience of resource management and cost awareness.</p>
-<p><strong>Backup Option</strong>: If you need a shared subscription, you can use:</p>
-<ul>
-<li><strong>XStore AI Subscription</strong>: <code>6cbd0699-eae8-4633-8054-691a6b726d90</code></li>
-<li>⚠️ <strong>Important</strong>: Still use your alias in resource names for easy identification and cleanup</li>
-</ul>
-<h3 id="%F0%9F%94%90-security-note-for-microsoft-engineers">🔐 Security Note for Microsoft Engineers</h3>
+<h3 id="%F0%9F%94%90-security-note">🔐 Security Note</h3>
 <p>For this lab, we'll use <code>.env</code> files for simplicity. In production Microsoft systems, always use <strong>Azure Key Vault</strong> for secrets management and follow our enterprise security guidelines.</p>
 <h3 id="%F0%9F%92%A1-what-each-tool-does">💡 What Each Tool Does</h3>
 <ul>
@@ -483,14 +478,13 @@ Make it beginner-friendly with clear progress indicators.
 </ul>
 <h3 id="step-2-simple-azure-setup-8-minutes">Step 2: Simple Azure Setup (8 minutes)</h3>
 <p>💡 <strong>What We're Doing</strong>: Creating your cloud services with one prompt</p>
-<p><strong>Copilot Prompt:</strong>
-<em>Note: Replace <code>&lt;your-alias&gt;</code> with your Microsoft alias to avoid naming conflicts</em></p>
+<p><strong>Copilot Prompt:</strong></p>
 <pre class="hljs"><code><div>Create a PowerShell script that sets up basic Azure resources for RAG:
 1. Login to Azure and list subscriptions
-2. Create resource group &quot;rg-&lt;your-alias&gt;-rag&quot; in eastus2 (replace &lt;your-alias&gt; with your actual Microsoft alias)
-3. Create storage account with name &quot;st&lt;youralias&gt;rag&quot; + random suffix and &quot;health-docs&quot; container
-4. Create Azure AI Search service with name &quot;srch-&lt;your-alias&gt;-rag&quot; + random suffix (use free tier)
-5. Create Azure OpenAI with name &quot;aoai-&lt;your-alias&gt;-rag&quot; and deploy text-embedding-3-small and gpt-4o-mini models
+2. Create resource group &quot;rg-labs-rag&quot; in eastus2
+3. Create storage account with name &quot;stlabsrag&quot; + random suffix and &quot;health-docs&quot; container
+4. Create Azure AI Search service with name &quot;srch-labs-rag&quot; + random suffix (use free tier)
+5. Create Azure OpenAI with name &quot;aoai-labs-rag&quot; and deploy text-embedding-3-small and gpt-4o-mini models
 6. Generate .env file with all keys and endpoints
 7. Print a success summary with resource names and estimated monthly costs
 
