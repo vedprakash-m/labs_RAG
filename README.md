@@ -19,9 +19,9 @@ Transform from traditional coding to **AI-powered development** by building a pr
 ### 📖 **[🎓 Complete Lab Instructions → `Lab_instructions/Labs_RAG.md`](Lab_instructions/Labs_RAG.md)**
 
 **Choose Your Track:**
-- **🟢 Beginner (30 min)**: "Hello RAG!" - Get your first AI system working
-- **🟡 Intermediate (60 min)**: Production-ready system with monitoring & testing
-- **🔴 Advanced (90 min)**: Enterprise-grade with security, compliance & MLOps
+- **Track A for 🟢 Beginner (30 min)**: "Hello RAG!" - Get your first AI system working
+- **Track B for 🟡 Intermediate (60 min)**: Production-ready system with monitoring & testing
+- **Track C for 🔴 Advanced (90 min)**: Enterprise-grade with security, compliance & MLOps
 
 ## 🤔 What is Vibe Coding?
 
